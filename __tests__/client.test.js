@@ -24,32 +24,9 @@ const keystore = {
   }
 }
 
-const getClient = async (
-  useAwaitSetPrivateKey = true,
-  doNotSetPrivateKey = false
-) => {
-  const client = new BitSongClient("https://rpc.testnet-2.bitsong.network")
-  // await client.initChain()
-  // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
-  // if (!doNotSetPrivateKey) {
-  //   if (useAwaitSetPrivateKey) {
-  //     await client.setPrivateKey(privateKey)
-  //   } else {
-  //     client.setPrivateKey(privateKey) // test without `await`
-  //   }
-  // }
-  // // use default delegates (signing, broadcast)
-  // client.useDefaultSigningDelegate()
-  // client.useDefaultBroadcastDelegate()
+const getClient = async () => {
+  const client = new BitSongClient()
   return client
-}
-
-const wait = ms => {
-  return new Promise(function(resolve) {
-    setTimeout(function() {
-      resolve()
-    }, ms)
-  })
 }
 
 beforeEach(() => {
@@ -57,14 +34,14 @@ beforeEach(() => {
 })
 
 it("create account", async () => {
-  const client = await getClient(false)
+  const client = await getClient()
   const res = client.createAccount()
   expect(res.address).toBeTruthy()
   expect(res.privateKey).toBeTruthy()
 })
 
 it("create account with keystore", async () => {
-  const client = await getClient(false, true)
+  const client = await getClient()
   const res = client.createAccountWithKeystore("12345678")
   expect(res.address).toBeTruthy()
   expect(res.privateKey).toBeTruthy()
@@ -72,14 +49,14 @@ it("create account with keystore", async () => {
 })
 
 it("recover account from keystore", async () => {
-  const client = await getClient(false, true)
+  const client = await getClient()
   const res = client.recoverAccountFromKeystore(keystore, "12345678")
   expect(res.address).toBeTruthy()
   expect(res.privateKey).toBeTruthy()
 })
 
 it("recover account from bad password keystore", async () => {
-  const client = await getClient(false, true)
+  const client = await getClient()
   expect(() => {
     client.recoverAccountFromKeystore(keystore, "12345qwert!S")
   }).toThrowError()
@@ -87,8 +64,8 @@ it("recover account from bad password keystore", async () => {
 
 it("recover account from mneomnic", async () => {
   jest.setTimeout(50000)
-  const client = await getClient(false)
-  const res = client.recoverAccountFromMneomnic(mnemonic)
+  const client = await getClient()
+  const res = client.recoverAccountFromMnemonic(mnemonic)
   await 1500
   expect(res.address).toBeTruthy()
   expect(res.privateKey).toBeTruthy()
@@ -96,7 +73,7 @@ it("recover account from mneomnic", async () => {
 
 it("recover account from privatekey", async () => {
   jest.setTimeout(50000)
-  const client = await getClient(false)
+  const client = await getClient()
   const pk = crypto.generatePrivateKey()
   const res = client.recoverAccountFromPrivateKey(pk)
   await 1500
