@@ -45,7 +45,6 @@
     "elliptic": "^6.0.0",
     "eslint-utils": "^1.4.2",
     "events": "^3.0.0",
-    "glob": "^7.1.6",
     "is_js": "^0.9.0",
     "ndjson": "^1.5.0",
     "protocol-buffers-encodings": "^1.1.0",
