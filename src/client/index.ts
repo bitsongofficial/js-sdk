@@ -1,22 +1,30 @@
-/**
- * @module client
- */
+/* eslint-disable */
 import * as crypto from "../crypto"
+
+export const NETWORK_PREFIX_MAPPING = {
+  testnet: "bitsong",
+  mainnet: "bitsong",
+} as const
 
 /**
  * The Bitsong Network client.
  */
 export class BitSongClient {
+  public addressPrefix: typeof NETWORK_PREFIX_MAPPING[keyof typeof NETWORK_PREFIX_MAPPING] =
+    "bitsong"
+
+  public address?: string
+  private _privateKey: string | null = null
   /**
-   * @param {String} server Binance Chain public url
+   * @param {String} server BitSong Network public url
    * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
    * @param {Number} source where does this transaction come from (default 0)
    */
-  constructor(addressPrefix = "bitsong") {
-    if (!addressPrefix) {
-      throw new Error("addressPrefix should not be null")
+  // constructor(server: string, useAsyncBroadcast = false, source = 0) {
+  constructor(server: string) {
+    if (!server) {
+      throw new Error("BitSong chain server should not be null")
     }
-    this.addressPrefix = addressPrefix
   }
 
   /**
@@ -31,7 +39,7 @@ export class BitSongClient {
     const privateKey = crypto.generatePrivateKey()
     return {
       privateKey,
-      address: crypto.getAddressFromPrivateKey(privateKey, this.addressPrefix)
+      address: crypto.getAddressFromPrivateKey(privateKey, this.addressPrefix),
     }
   }
 
@@ -44,7 +52,7 @@ export class BitSongClient {
    *  keystore
    * }
    */
-  createAccountWithKeystore(password) {
+  createAccountWithKeystore(password: string) {
     if (!password) {
       throw new Error("password should not be falsy")
     }
@@ -57,7 +65,7 @@ export class BitSongClient {
     return {
       privateKey,
       address,
-      keystore
+      keystore,
     }
   }
 
@@ -80,7 +88,7 @@ export class BitSongClient {
     return {
       privateKey,
       address,
-      mnemonic
+      mnemonic,
     }
   }
 
@@ -93,7 +101,10 @@ export class BitSongClient {
    * address
    * }
    */
-  recoverAccountFromKeystore(keystore, password) {
+  recoverAccountFromKeystore(
+    keystore: Parameters<typeof crypto.getPrivateKeyFromKeyStore>[0],
+    password: Parameters<typeof crypto.getPrivateKeyFromKeyStore>[1]
+  ) {
     const privateKey = crypto.getPrivateKeyFromKeyStore(keystore, password)
     const address = crypto.getAddressFromPrivateKey(
       privateKey,
@@ -101,7 +112,7 @@ export class BitSongClient {
     )
     return {
       privateKey,
-      address
+      address,
     }
   }
 
@@ -113,7 +124,7 @@ export class BitSongClient {
    * address
    * }
    */
-  recoverAccountFromMnemonic(mnemonic) {
+  recoverAccountFromMnemonic(mnemonic: string) {
     const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
     const address = crypto.getAddressFromPrivateKey(
       privateKey,
@@ -121,8 +132,12 @@ export class BitSongClient {
     )
     return {
       privateKey,
-      address
+      address,
     }
+  }
+  // support an old method name containing a typo
+  recoverAccountFromMneomnic(mnemonic: string) {
+    return this.recoverAccountFromMnemonic(mnemonic)
   }
 
   /**
@@ -133,14 +148,14 @@ export class BitSongClient {
    * address
    * }
    */
-  recoverAccountFromPrivateKey(privateKey) {
+  recoverAccountFromPrivateKey(privateKey: string) {
     const address = crypto.getAddressFromPrivateKey(
       privateKey,
       this.addressPrefix
     )
     return {
       privateKey,
-      address
+      address,
     }
   }
 
@@ -150,7 +165,10 @@ export class BitSongClient {
    * @param {String} prefix
    * @return {Boolean}
    */
-  checkAddress(address, prefix = this.addressPrefix) {
+  checkAddress(
+    address: string,
+    prefix: BitSongClient["addressPrefix"] = this.addressPrefix
+  ) {
     return crypto.checkAddress(address, prefix)
   }
 
@@ -159,14 +177,13 @@ export class BitSongClient {
    * @return {String}
    */
   getClientKeyAddress() {
-    if (!this.privateKey)
+    if (!this._privateKey)
       throw new Error("no private key is set on this client")
     const address = crypto.getAddressFromPrivateKey(
-      this.privateKey,
+      this._privateKey,
       this.addressPrefix
     )
     this.address = address
     return address
   }
-
 }

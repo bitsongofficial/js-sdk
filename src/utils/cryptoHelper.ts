@@ -1,18 +1,13 @@
-/**
- * @module utils
- */
-
 import hexEncoding from "crypto-js/enc-hex"
-import SHA3 from "crypto-js/sha3"
-import SHA256 from "crypto-js/sha256"
 import RIPEMD160 from "crypto-js/ripemd160"
-//import * as crypto from "../crypto"
+import SHA256 from "crypto-js/sha256"
+import SHA3 from "crypto-js/sha3"
 
 /**
  * @param {arrayBuffer} arr
  * @returns {string} HEX string
  */
-export const ab2hexstring = arr => {
+export const ab2hexstring = (arr: any) => {
   if (typeof arr !== "object") {
     throw new Error("ab2hexstring expects an array")
   }
@@ -30,12 +25,12 @@ export const ab2hexstring = arr => {
  * @param {string} hex message to hash
  * @returns {string} hash output
  */
-export const sha256ripemd160 = hex => {
+export const sha256ripemd160 = (hex: string) => {
   if (typeof hex !== "string")
     throw new Error("sha256ripemd160 expects a string")
   if (hex.length % 2 !== 0) throw new Error(`invalid hex string length: ${hex}`)
   const hexEncoded = hexEncoding.parse(hex)
-  const ProgramSha256 = SHA256(hexEncoded)
+  const ProgramSha256: any = SHA256(hexEncoded)
   return RIPEMD160(ProgramSha256).toString()
 }
 
@@ -44,7 +39,7 @@ export const sha256ripemd160 = hex => {
  * @param {string} hex message to hash
  * @returns {string} hash output
  */
-export const sha256 = hex => {
+export const sha256 = (hex: string) => {
   if (typeof hex !== "string") throw new Error("sha256 expects a hex string")
   if (hex.length % 2 !== 0) throw new Error(`invalid hex string length: ${hex}`)
   const hexEncoded = hexEncoding.parse(hex)
@@ -56,7 +51,7 @@ export const sha256 = hex => {
  * @param {string} hex message to hash
  * @returns {string} hash output
  */
-export const sha3 = hex => {
+export const sha3 = (hex: string) => {
   if (typeof hex !== "string") throw new Error("sha3 expects a hex string")
   if (hex.length % 2 !== 0) throw new Error(`invalid hex string length: ${hex}`)
   const hexEncoded = hexEncoding.parse(hex)
