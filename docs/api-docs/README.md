@@ -7,6 +7,8 @@
 
 * ["crypto-browserify"](modules/_crypto_browserify_.md)
 * ["is_js"](modules/_is_js_.md)
+* ["ndjson"](modules/_ndjson_.md)
+* ["protocol-buffers-encodings"](modules/_protocol_buffers_encodings_.md)
 * ["secure-random"](modules/_secure_random_.md)
 
 ### Classes
