@@ -1,12 +1,15 @@
 import * as crypto from "../crypto";
+import HttpRequest from "../utils/request";
 /**
  * The Bitsong Network client.
  */
 export declare class BitSongClient {
-    addressPrefix: string | string;
-    address?: string;
-    private _privateKey;
+    _httpClient: HttpRequest;
     private _hdpath;
+    private _privateKey;
+    address?: string;
+    chainId?: string | null;
+    addressPrefix: string | string;
     /**
      * @param {String} server BitSong Network public url
      * @param {String} addressPrefix BitSong Address Prefix
@@ -14,7 +17,21 @@ export declare class BitSongClient {
      * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
      * @param {Number} source where does this transaction come from (default 0)
      */
-    constructor(server: string, addressPrefix: string, hdpath: string);
+    constructor(server: string, addressPrefix?: string, hdpath?: string);
+    /**
+     * Initialize the client with the chain's ID. Asynchronous.
+     * @return {Promise}
+     */
+    initChain(): Promise<this>;
+    /**
+     * get account
+     * @param {String} address
+     * @return {Promise} resolves with http response
+     */
+    getAccount(address?: string | undefined): Promise<{
+        result: any;
+        status: number;
+    } | null>;
     /**
      * Creates a private key and returns it and its address.
      * @return {object} the private key and address in an object.

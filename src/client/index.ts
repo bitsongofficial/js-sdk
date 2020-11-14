@@ -1,5 +1,6 @@
 /* eslint-disable */
 import * as crypto from "../crypto"
+import HttpRequest from "../utils/request"
 import { v4 as uuidv4 } from 'uuid';
 import FileSaver from "file-saver"
 
@@ -7,10 +8,14 @@ import FileSaver from "file-saver"
  * The Bitsong Network client.
  */
 export class BitSongClient {
-  public addressPrefix: string | string = 'bitsong'
-  public address?: string
-  private _privateKey: string | null = null
+
+  public _httpClient: HttpRequest
   private _hdpath: string | string = `44'/118'/0'/0/`
+  private _privateKey: string | null = null
+  public address?: string
+  public chainId?: string | null
+  public addressPrefix: string | string = 'bitsong'
+
   /**
    * @param {String} server BitSong Network public url
    * @param {String} addressPrefix BitSong Address Prefix
@@ -19,10 +24,11 @@ export class BitSongClient {
    * @param {Number} source where does this transaction come from (default 0)
    */
   // constructor(server: string, useAsyncBroadcast = false, source = 0) {
-  constructor(server: string, addressPrefix: string, hdpath: string) {
+  constructor(server: string, addressPrefix?: string, hdpath?: string) {
     if (!server) {
       throw new Error("BitSong chain server should not be null")
     }
+    this._httpClient = new HttpRequest(server)
 
     if (addressPrefix) {
       this.addressPrefix = addressPrefix
@@ -30,6 +36,39 @@ export class BitSongClient {
 
     if (hdpath) {
       this._hdpath = hdpath
+    }
+  }
+
+  /**
+   * Initialize the client with the chain's ID. Asynchronous.
+   * @return {Promise}
+   */
+  async initChain() {
+    if (!this.chainId) {
+      const data = await this._httpClient.request("get", "node_info")
+      this.chainId = data.result.node_info && data.result.node_info.network
+    }
+    return this
+  }
+
+  /**
+   * get account
+   * @param {String} address
+   * @return {Promise} resolves with http response
+   */
+  async getAccount(address = this.address) {
+    if (!address) {
+      throw new Error("address should not be empty")
+    }
+
+    try {
+      const data = await this._httpClient.request(
+        "get",
+        `auth/accounts/${address}`
+      )
+      return data
+    } catch (err) {
+      return null
     }
   }
 
