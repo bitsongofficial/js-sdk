@@ -37,9 +37,6 @@ const MNEMONIC_LEN = 256
 const DECODED_ADDRESS_LEN = 20
 const CURVE = "secp256k1"
 
-//hdpath
-const HDPATH = "44'/118'/0'/0/"
-
 const ec = new EC(CURVE)
 
 /**
@@ -378,7 +375,8 @@ export const getPrivateKeyFromMnemonic = (
   mnemonic: string,
   derive = true,
   index = 0,
-  password = ""
+  password = "",
+  hdpath = "44'/118'/0'/0/"
 ): string => {
   if (
     !bip39.validateMnemonic(mnemonic, bip39.wordlists.english) &&
@@ -396,7 +394,7 @@ export const getPrivateKeyFromMnemonic = (
   const seed = bip39.mnemonicToSeedSync(mnemonic, password)
   if (derive) {
     const master = bip32.fromSeed(seed)
-    const child = master.derivePath(HDPATH + index)
+    const child = master.derivePath(hdpath + index)
     if (!child.privateKey) {
       throw new Error("child does not have a privateKey")
     }

@@ -320,7 +320,7 @@ ___
 
 ### `Const` getPrivateKeyFromMnemonic
 
-▸ **getPrivateKeyFromMnemonic**(`mnemonic`: string, `derive`: boolean, `index`: number, `password`: string): *string*
+▸ **getPrivateKeyFromMnemonic**(`mnemonic`: string, `derive`: boolean, `index`: number, `password`: string, `hdpath`: string): *string*
 
 Get a private key from mnemonic words.
 
@@ -332,6 +332,7 @@ Name | Type | Default | Description |
 `derive` | boolean | true | derive a private key using the default HD path (default: true) |
 `index` | number | 0 | the bip44 address index (default: 0) |
 `password` | string | "" | according to bip39 |
+`hdpath` | string | "44'/118'/0'/0/" | - |
 
 **Returns:** *string*
 

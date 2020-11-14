@@ -28,13 +28,14 @@ The Bitsong Network client.
 
 ###  constructor
 
-\+ **new BitSongClient**(`server`: string): *[BitSongClient](bitsongclient.md)*
+\+ **new BitSongClient**(`server`: string, `addressPrefix`: string): *[BitSongClient](bitsongclient.md)*
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
 `server` | string | BitSong Network public url |
+`addressPrefix` | string | - |
 
 **Returns:** *[BitSongClient](bitsongclient.md)*
 

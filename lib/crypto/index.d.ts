@@ -145,4 +145,4 @@ export declare const validateMnemonic: typeof bip39.validateMnemonic;
  * @param {string} password according to bip39
  * @return {string} hexstring
  */
-export declare const getPrivateKeyFromMnemonic: (mnemonic: string, derive?: boolean, index?: number, password?: string) => string;
+export declare const getPrivateKeyFromMnemonic: (mnemonic: string, derive?: boolean, index?: number, password?: string, hdpath?: string) => string;

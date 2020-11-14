@@ -1,18 +1,11 @@
 /* eslint-disable */
 import * as crypto from "../crypto"
 
-export const NETWORK_PREFIX_MAPPING = {
-  testnet: "bitsong",
-  mainnet: "bitsong",
-} as const
-
 /**
  * The Bitsong Network client.
  */
 export class BitSongClient {
-  public addressPrefix: typeof NETWORK_PREFIX_MAPPING[keyof typeof NETWORK_PREFIX_MAPPING] =
-    "bitsong"
-
+  public addressPrefix: string | string = 'bitsong'
   public address?: string
   private _privateKey: string | null = null
   /**
@@ -21,9 +14,13 @@ export class BitSongClient {
    * @param {Number} source where does this transaction come from (default 0)
    */
   // constructor(server: string, useAsyncBroadcast = false, source = 0) {
-  constructor(server: string) {
+  constructor(server: string, addressPrefix: string) {
     if (!server) {
       throw new Error("BitSong chain server should not be null")
+    }
+
+    if (addressPrefix) {
+      this.addressPrefix = addressPrefix
     }
   }
 

@@ -1,13 +1,9 @@
 import * as crypto from "../crypto";
-export declare const NETWORK_PREFIX_MAPPING: {
-    readonly testnet: "bitsong";
-    readonly mainnet: "bitsong";
-};
 /**
  * The Bitsong Network client.
  */
 export declare class BitSongClient {
-    addressPrefix: typeof NETWORK_PREFIX_MAPPING[keyof typeof NETWORK_PREFIX_MAPPING];
+    addressPrefix: string | string;
     address?: string;
     private _privateKey;
     /**
@@ -15,7 +11,7 @@ export declare class BitSongClient {
      * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
      * @param {Number} source where does this transaction come from (default 0)
      */
-    constructor(server: string);
+    constructor(server: string, addressPrefix: string);
     /**
      * Creates a private key and returns it and its address.
      * @return {object} the private key and address in an object.
