@@ -6,12 +6,15 @@ export declare class BitSongClient {
     addressPrefix: string | string;
     address?: string;
     private _privateKey;
+    private _hdpath;
     /**
      * @param {String} server BitSong Network public url
+     * @param {String} addressPrefix BitSong Address Prefix
+     * @param {String} hdpath BitSong HDPATH
      * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
      * @param {Number} source where does this transaction come from (default 0)
      */
-    constructor(server: string, addressPrefix: string);
+    constructor(server: string, addressPrefix: string, hdpath: string);
     /**
      * Creates a private key and returns it and its address.
      * @return {object} the private key and address in an object.
@@ -38,6 +41,12 @@ export declare class BitSongClient {
         address: string;
         keystore: crypto.KeyStore;
     };
+    /**
+     * Generate and download an account keystore object, and returns the private key and address.
+     * @param {String} privateKey
+     * @param {String} password
+     */
+    generateAndDownloadKeyStore(privateKey: string, password: string): void;
     /**
      * Creates an account from mnemonic seed phrase.
      * @return {object}

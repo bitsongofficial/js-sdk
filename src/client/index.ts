@@ -1,5 +1,7 @@
 /* eslint-disable */
 import * as crypto from "../crypto"
+import { v4 as uuidv4 } from 'uuid';
+import FileSaver from "file-saver"
 
 /**
  * The Bitsong Network client.
@@ -8,19 +10,26 @@ export class BitSongClient {
   public addressPrefix: string | string = 'bitsong'
   public address?: string
   private _privateKey: string | null = null
+  private _hdpath: string | string = `44'/118'/0'/0/`
   /**
    * @param {String} server BitSong Network public url
+   * @param {String} addressPrefix BitSong Address Prefix
+   * @param {String} hdpath BitSong HDPATH
    * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
    * @param {Number} source where does this transaction come from (default 0)
    */
   // constructor(server: string, useAsyncBroadcast = false, source = 0) {
-  constructor(server: string, addressPrefix: string) {
+  constructor(server: string, addressPrefix: string, hdpath: string) {
     if (!server) {
       throw new Error("BitSong chain server should not be null")
     }
 
     if (addressPrefix) {
       this.addressPrefix = addressPrefix
+    }
+
+    if (hdpath) {
+      this._hdpath = hdpath
     }
   }
 
@@ -66,6 +75,29 @@ export class BitSongClient {
     }
   }
 
+
+  /**
+   * Generate and download an account keystore object, and returns the private key and address.
+   * @param {String} privateKey
+   * @param {String} password
+   */
+  generateAndDownloadKeyStore(privateKey: string, password: string) {
+    if (!privateKey) {
+      throw new Error("password should not be falsy")
+    }
+    if (!password) {
+      throw new Error("password should not be falsy")
+    }
+    const keystore = crypto.generateKeyStore(privateKey, password)
+
+    const uuid = uuidv4()
+    const blob = new Blob([JSON.stringify(keystore)], {
+      type: "text/plain;charset=utf-8"
+    })
+
+    return FileSaver.saveAs(blob, `${uuid}_keystore.txt`)
+  }
+
   /**
    * Creates an account from mnemonic seed phrase.
    * @return {object}
@@ -77,7 +109,7 @@ export class BitSongClient {
    */
   createAccountWithMneomnic() {
     const mnemonic = crypto.generateMnemonic()
-    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, this._hdpath)
     const address = crypto.getAddressFromPrivateKey(
       privateKey,
       this.addressPrefix
@@ -122,7 +154,7 @@ export class BitSongClient {
    * }
    */
   recoverAccountFromMnemonic(mnemonic: string) {
-    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+    const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic, this._hdpath)
     const address = crypto.getAddressFromPrivateKey(
       privateKey,
       this.addressPrefix

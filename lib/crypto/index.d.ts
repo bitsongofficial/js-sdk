@@ -140,9 +140,10 @@ export declare const validateMnemonic: typeof bip39.validateMnemonic;
  * Get a private key from mnemonic words.
  * @category crypto
  * @param {string} mnemonic the mnemonic phrase words
+ * @param {string} hdpath (default: 44'/118'/0'/0/)
  * @param {Boolean} derive derive a private key using the default HD path (default: true)
  * @param {number} index the bip44 address index (default: 0)
  * @param {string} password according to bip39
  * @return {string} hexstring
  */
-export declare const getPrivateKeyFromMnemonic: (mnemonic: string, derive?: boolean, index?: number, password?: string, hdpath?: string) => string;
+export declare const getPrivateKeyFromMnemonic: (mnemonic: string, hdpath?: string, derive?: boolean, index?: number, password?: string) => string;

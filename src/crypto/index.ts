@@ -366,6 +366,7 @@ export const validateMnemonic = bip39.validateMnemonic
  * Get a private key from mnemonic words.
  * @category crypto
  * @param {string} mnemonic the mnemonic phrase words
+ * @param {string} hdpath (default: 44'/118'/0'/0/)
  * @param {Boolean} derive derive a private key using the default HD path (default: true)
  * @param {number} index the bip44 address index (default: 0)
  * @param {string} password according to bip39
@@ -373,10 +374,10 @@ export const validateMnemonic = bip39.validateMnemonic
  */
 export const getPrivateKeyFromMnemonic = (
   mnemonic: string,
+  hdpath = "44'/118'/0'/0/",
   derive = true,
   index = 0,
-  password = "",
-  hdpath = "44'/118'/0'/0/"
+  password = ""
 ): string => {
   if (
     !bip39.validateMnemonic(mnemonic, bip39.wordlists.english) &&
