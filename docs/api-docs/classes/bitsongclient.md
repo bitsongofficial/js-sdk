@@ -16,6 +16,7 @@ The Bitsong Network client.
 ### Methods
 
 * [broadcast](bitsongclient.md#broadcast)
+* [buildTransaction](bitsongclient.md#buildtransaction)
 * [checkAddress](bitsongclient.md#checkaddress)
 * [createAccount](bitsongclient.md#createaccount)
 * [createAccountWithKeystore](bitsongclient.md#createaccountwithkeystore)
@@ -29,6 +30,7 @@ The Bitsong Network client.
 * [recoverAccountFromKeystore](bitsongclient.md#recoveraccountfromkeystore)
 * [recoverAccountFromMnemonic](bitsongclient.md#recoveraccountfrommnemonic)
 * [recoverAccountFromPrivateKey](bitsongclient.md#recoveraccountfromprivatekey)
+* [setAccountInfo](bitsongclient.md#setaccountinfo)
 
 ## Constructors
 
@@ -63,6 +65,27 @@ Name | Type | Description |
 **Returns:** *Promise‹object›*
 
 resolves with response (success or fail)
+
+___
+
+###  buildTransaction
+
+▸ **buildTransaction**(`msgs`: Msg[], `memo`: string, `fee`: Fee, `sequence_number`: string): *Promise‹[Transaction](transaction.md)›*
+
+Build Transaction before broadcast.
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`msgs` | Msg[] | - |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence_number` | string | "" |
+
+**Returns:** *Promise‹[Transaction](transaction.md)›*
+
+Transaction object
 
 ___
 
@@ -296,3 +319,19 @@ Name | Type | Description |
 * **address**: *string*
 
 * **privateKey**: *string*
+
+___
+
+###  setAccountInfo
+
+▸ **setAccountInfo**(`privateKey`: string): *Promise‹[BitSongClient](bitsongclient.md)›*
+
+Set client account.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`privateKey` | string |
+
+**Returns:** *Promise‹[BitSongClient](bitsongclient.md)›*
