@@ -102,7 +102,7 @@ class Transaction {
     return convertObjectToSignBytes(sortObject(signMsg))
   }
 
-  sign(privateKey: string) {
+  sign(privateKey: string): Transaction {
     if (!privateKey) {
       throw new Error("private key should not be null")
     }

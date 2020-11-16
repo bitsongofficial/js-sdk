@@ -36,6 +36,13 @@ export declare const decodeAddress: (value: string) => Buffer;
  */
 export declare const checkAddress: (address: string, hrp: string) => boolean;
 /**
+ * Encode pubKey to compressed pubKey buffer.
+ * TODO: fix pubKey type
+ * @param {any} pubKey
+ * @return {Buffer}
+ */
+export declare const encodePubKeyToCompressedBuffer: (pubKey: any) => Buffer;
+/**
  * Encodes an address from input data bytes.
  * @category crypto
  * @param {string} value the public key to encode

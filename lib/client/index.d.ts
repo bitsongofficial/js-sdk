@@ -1,5 +1,9 @@
 import * as crypto from "../crypto";
 import HttpRequest from "../utils/request";
+import Transaction, { Fee, Msg } from '../tx';
+export declare const api: {
+    broadcast: string;
+};
 /**
  * The Bitsong Network client.
  */
@@ -8,8 +12,9 @@ export declare class BitSongClient {
     private _hdpath;
     private _privateKey;
     address?: string;
-    chainId?: string | null;
+    chain_id: string;
     addressPrefix: string | string;
+    account_number: string;
     /**
      * @param {String} server BitSong Network public url
      * @param {String} addressPrefix BitSong Address Prefix
@@ -18,6 +23,32 @@ export declare class BitSongClient {
      * @param {Number} source where does this transaction come from (default 0)
      */
     constructor(server: string, addressPrefix?: string, hdpath?: string);
+    /**
+     * Set client account.
+     * @param {string} privateKey
+     * @return {BitSongClient}
+     */
+    setAccountInfo(privateKey: string): Promise<BitSongClient>;
+    /**
+     * Build Transaction before broadcast.
+     * @param {Object} msg
+     * @param {Object} signMsg
+     * @param {String} memo
+     * @param {String} fee
+     * @param {Number} sequenceNumber
+     * @return {Transaction} Transaction object
+     */
+    buildTransaction(msgs: Msg[], memo: string | undefined, fee: Fee, sequence_number?: string): Promise<Transaction>;
+    /**
+     * Broadcast a raw transaction to the blockchain.
+     * @param {String} signedBz signed and serialized raw transaction
+     * @param {Boolean} sync use synchronous mode, optional
+     * @return {Promise} resolves with response (success or fail)
+     */
+    broadcast(signedBz: string): Promise<{
+        result: any;
+        status: number;
+    }>;
     /**
      * Initialize the client with the chain's ID. Asynchronous.
      * @return {Promise}
@@ -32,6 +63,18 @@ export declare class BitSongClient {
         result: any;
         status: number;
     } | null>;
+    /**
+     * get SequenceNumber from accountInfo Object
+     * @param {String} accountInfo
+     * @return {Number} sequenceNumber
+     */
+    getSequenceNumberFromAccountInfo(accountInfo: any): any;
+    /**
+     * get accountNumber from accountInfo Object
+     * @param {String} accountInfo
+     * @return {Number} accountNumber
+     */
+    getAccountNumberFromAccountInfo(accountInfo: any): any;
     /**
      * Creates a private key and returns it and its address.
      * @return {object} the private key and address in an object.

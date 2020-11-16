@@ -3,6 +3,7 @@ import * as crypto from "../crypto"
 import HttpRequest from "../utils/request"
 import { v4 as uuidv4 } from 'uuid';
 import FileSaver from "file-saver"
+import Transaction, { Fee, Msg } from '../tx';
 
 export const api = {
   broadcast: "/txs",
@@ -15,10 +16,11 @@ export class BitSongClient {
 
   public _httpClient: HttpRequest
   private _hdpath: string | string = `44'/118'/0'/0/`
-  private _privateKey: string | null = null
+  private _privateKey: string
   public address?: string
-  public chainId?: string | null
+  public chain_id: string
   public addressPrefix: string | string = 'bitsong'
+  public account_number: string
 
   /**
    * @param {String} server BitSong Network public url
@@ -41,7 +43,49 @@ export class BitSongClient {
     if (hdpath) {
       this._hdpath = hdpath
     }
+
+    this.chain_id = ""
+    this._privateKey = ""
+    this.account_number = ""
   }
+
+  /**
+   * Set client account.
+   * @param {string} privateKey
+   * @return {BitSongClient}
+   */
+  async setAccountInfo(privateKey: string): Promise<BitSongClient> {
+    if (privateKey !== this._privateKey) {
+        const address = crypto.getAddressFromPrivateKey(privateKey, this.addressPrefix)
+        if (!address) throw new Error("invalid privateKey: " + privateKey)
+        if (address === this.address) return this
+        this._privateKey = privateKey
+        this.address = address
+        const account = await this.getAccount(address)
+        this.account_number = await this.getAccountNumberFromAccountInfo(account)
+    }
+    return this
+}
+
+  /**
+   * Build Transaction before broadcast.
+   * @param {Object} msg
+   * @param {Object} signMsg
+   * @param {String} memo
+   * @param {String} fee
+   * @param {Number} sequenceNumber
+   * @return {Transaction} Transaction object
+   */
+  async buildTransaction(msgs: Msg[], memo = "", fee: Fee, sequence_number = ""): Promise<Transaction> {
+    if ((!this.account_number || !sequence_number)) {
+        const account_info = await this.getAccount()
+        sequence_number = this.getSequenceNumberFromAccountInfo(account_info)
+        this.account_number = this.getAccountNumberFromAccountInfo(account_info)
+    }
+
+    const tx = new Transaction(this.chain_id, this.account_number, sequence_number, fee, memo, msgs)
+    return tx.sign(this._privateKey)
+}
 
   /**
    * Broadcast a raw transaction to the blockchain.
@@ -70,9 +114,9 @@ export class BitSongClient {
    * @return {Promise}
    */
   async initChain() {
-    if (!this.chainId) {
+    if (!this.chain_id) {
       const data = await this._httpClient.request("get", "node_info")
-      this.chainId = data.result.node_info && data.result.node_info.network
+      this.chain_id = data.result.node_info && data.result.node_info.network
     }
     return this
   }
@@ -104,7 +148,7 @@ export class BitSongClient {
    * @return {Number} sequenceNumber
    */
   getSequenceNumberFromAccountInfo(accountInfo: any) {
-    return accountInfo.result.value.sequence
+    return accountInfo.result.result.value.sequence
   }
 
   /**
@@ -113,7 +157,7 @@ export class BitSongClient {
    * @return {Number} accountNumber
    */
   getAccountNumberFromAccountInfo(accountInfo: any) {
-    return accountInfo.result.value.account_number
+    return accountInfo.result.result.value.account_number
   }
 
   /**

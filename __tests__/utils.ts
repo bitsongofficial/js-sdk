@@ -49,28 +49,16 @@ export const defaultFee: Fee = {
 let client: BitSongClient
 
 export const getClient = async (
-  useAwaitSetPrivateKey = true,
-  doNotSetPrivateKey = false,
   url = "https://lcd.testnet4.bitsong.network"
 ) => {
-  if (client && client.chainId) {
+  if (client && client.chain_id) {
     return client
   }
 
   client = new BitSongClient(url)
   await client.initChain()
-  // const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
-  // if (!doNotSetPrivateKey) {
-  //   if (useAwaitSetPrivateKey) {
-  //     await client.setPrivateKey(privateKey)
-  //   } else {
-  //     client.setPrivateKey(privateKey) // test without `await`
-  //   }
-  // }
-
-  // // use default delegates (signing, broadcast)
-  // client.useDefaultSigningDelegate()
-  // client.useDefaultBroadcastDelegate()
+  const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
+  await client.setAccountInfo(privateKey)
   return client
 }
 
