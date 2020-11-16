@@ -1,10 +1,12 @@
 import { BitSongClient } from "../src/client"
-// import * as crypto from "../src/crypto"
+import * as crypto from "../src/crypto"
 
 export const targetAddress = "bitsong1pdfr7xuckj6lhdphdde6peres9ufwgpsxge8yc"
 
 export const mnemonic =
   "offer caution gift cross surge pretty orange during eye soldier popular holiday mention east eight office fashion ill parrot vault rent devote earth cousin"
+
+export const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
 
 export const keystore = {
   version: 1,

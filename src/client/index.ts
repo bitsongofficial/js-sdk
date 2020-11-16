@@ -4,6 +4,10 @@ import HttpRequest from "../utils/request"
 import { v4 as uuidv4 } from 'uuid';
 import FileSaver from "file-saver"
 
+export const api = {
+  broadcast: "/txs",
+}
+
 /**
  * The Bitsong Network client.
  */
@@ -37,6 +41,29 @@ export class BitSongClient {
     if (hdpath) {
       this._hdpath = hdpath
     }
+  }
+
+  /**
+   * Broadcast a raw transaction to the blockchain.
+   * @param {String} signedBz signed and serialized raw transaction
+   * @param {Boolean} sync use synchronous mode, optional
+   * @return {Promise} resolves with response (success or fail)
+   */
+  async sendRawTransaction(signedBz: string) {
+    console.log(signedBz)
+    const opts = {
+      data: signedBz,
+      headers: {
+        "Content-Type": "application/json"
+      },
+    }
+    const response = await this._httpClient.request(
+      "post",
+      `${api.broadcast}`,
+      null,
+      opts
+    )
+    return response
   }
 
   /**

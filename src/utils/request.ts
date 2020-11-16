@@ -46,9 +46,9 @@ export class HttpRequest {
       .catch((err) => {
         let error = err
         try {
-          const msgObj = err.response && err.response.data
-          error = new Error(msgObj.message)
-          error.code = msgObj.code
+          error = new Error(
+            err.response && err.response.data ? err.response.data.error : ``
+          )
         } catch (err) {
           throw error
         }
