@@ -49,12 +49,11 @@ export class BitSongClient {
    * @param {Boolean} sync use synchronous mode, optional
    * @return {Promise} resolves with response (success or fail)
    */
-  async sendRawTransaction(signedBz: string) {
-    console.log(signedBz)
+  async broadcast(signedBz: string) {
     const opts = {
       data: signedBz,
       headers: {
-        "Content-Type": "application/json"
+        "content-type": "text/plain",
       },
     }
     const response = await this._httpClient.request(
@@ -97,6 +96,24 @@ export class BitSongClient {
     } catch (err) {
       return null
     }
+  }
+
+  /**
+   * get SequenceNumber from accountInfo Object
+   * @param {String} accountInfo
+   * @return {Number} sequenceNumber
+   */
+  getSequenceNumberFromAccountInfo(accountInfo: any) {
+    return accountInfo.result.value.sequence
+  }
+
+  /**
+   * get accountNumber from accountInfo Object
+   * @param {String} accountInfo
+   * @return {Number} accountNumber
+   */
+  getAccountNumberFromAccountInfo(accountInfo: any) {
+    return accountInfo.result.value.account_number
   }
 
   /**

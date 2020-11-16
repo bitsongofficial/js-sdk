@@ -78,6 +78,25 @@ export const checkAddress = (address: string, hrp: string): boolean => {
 }
 
 /**
+ * Encode pubKey to compressed pubKey buffer.
+ * TODO: fix pubKey type
+ * @param {any} pubKey
+ * @return {Buffer}
+ */
+export const encodePubKeyToCompressedBuffer = (pubKey: any) => {
+  let prefix = 2
+  if (pubKey.y.isOdd()) {
+    prefix = 3
+  }
+
+  const pubBytes = Buffer.concat([
+    Buffer.alloc(1, prefix),
+    pubKey.x.toArrayLike(Buffer, "be", 32),
+  ])
+  return pubBytes
+}
+
+/**
  * Encodes an address from input data bytes.
  * @category crypto
  * @param {string} value the public key to encode

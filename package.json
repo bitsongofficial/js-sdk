@@ -94,6 +94,7 @@
     "browserify": "^16.2.3",
     "buffer": "^5.2.1",
     "bufferutil": "^4.0.1",
+    "dotenv": "^8.2.0",
     "builtin-modules": "^3.1.0",
     "cross-env": "^5.2.0",
     "eslint": "^7.1.0",

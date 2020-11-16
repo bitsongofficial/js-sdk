@@ -1,10 +1,16 @@
+import dotenv from "dotenv"
+
+dotenv.config()
 import { BitSongClient } from "../src/client"
 import * as crypto from "../src/crypto"
+import { Fee } from "../src/tx"
 
-export const targetAddress = "bitsong1pdfr7xuckj6lhdphdde6peres9ufwgpsxge8yc"
+export const targetAddress = process.env.ADDRESS
 
-export const mnemonic =
-  "offer caution gift cross surge pretty orange during eye soldier popular holiday mention east eight office fashion ill parrot vault rent devote earth cousin"
+// export const mnemonic =
+//   "offer caution gift cross surge pretty orange during eye soldier popular holiday mention east eight office fashion ill parrot vault rent devote earth cousin"
+
+export const mnemonic = process.env.MNEMONIC
 
 export const privateKey = crypto.getPrivateKeyFromMnemonic(mnemonic)
 
@@ -28,6 +34,16 @@ export const keystore = {
     mac:
       "20361f6d0e6c5321617a6f647c85b1c356a0cb79e560322f00d758d90d5f3a27a2555530fb7315d8209e61fd2d4a85490e349a871d67aac8a79441fa903691ce",
   },
+}
+
+export const defaultFee: Fee = {
+  amount: [
+    {
+      amount: "50000",
+      denom: "ubtsg",
+    },
+  ],
+  gas: "200000",
 }
 
 let client: BitSongClient
