@@ -1,7 +1,7 @@
 # BitSong Network JavaScript SDK
 
 <p>
-<img src="https://img.shields.io/badge/version-0.4.0--dev-yellow.svg" />
+<img src="https://img.shields.io/badge/version-0.6.0--dev-yellow.svg" />
 <a href="https://twitter.com/bitsongofficial">
 <img alt="Twitter: BitSong" src="https://img.shields.io/twitter/follow/bitsongofficial.svg?style=social"  target="_blank" />
 </a>
@@ -24,6 +24,7 @@ interact with BitSong Network. It includes the following core components:
 ## Projects Availables
 
 - [BitSong Console](https://console.bitsong.network)
+- [BitSong Explorer](https://testnet.explorebitsong.com)
 
 # Installation
 
@@ -49,13 +50,13 @@ $ sudo apt-get install libudev-dev libusb-dev usbutils
 If you **do not** need Ledger support with node.js:
 
 ```bash
-$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.5.0-dev --no-optional
+$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.6.0-dev --no-optional
 ```
 
 If you **need** Ledger support with node.js:
 
 ```bash
-$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.5.0-dev
+$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.6.0-dev
 ```
 
 ### Use with Webpack

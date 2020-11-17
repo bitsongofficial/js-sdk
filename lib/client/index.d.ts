@@ -185,6 +185,9 @@ export declare class BitSongClient {
      * Build and broadcast MsgSend
      * @param {String} to_address
      * @param {Coin} amount
+     * @param {String} memo
+     * @param {Fee} fee
+     * @param {String} sequence
      * @return {Promise}
      */
     send(to_address: string, amount: Coin[], memo: string | undefined, fee: Fee, sequence?: string): Promise<{
@@ -193,11 +196,51 @@ export declare class BitSongClient {
     }>;
     /**
      * Build and broadcast MsgDelegate
-     * @param {String} to_address
+     * @param {String} validator_address
      * @param {Coin} amount
+     * @param {String} memo
+     * @param {Fee} fee
+     * @param {String} sequence
      * @return {Promise}
      */
     delegate(validator_address: string, amount: Coin, memo: string | undefined, fee: Fee, sequence?: string): Promise<{
+        result: any;
+        status: number;
+    }>;
+    /**
+     * Build and broadcast MsgUndelegate
+     * @param {String} validator_address
+     * @param {Coin} amount
+     * @param {String} memo
+     * @param {Fee} fee
+     * @param {String} sequence
+     * @return {Promise}
+     */
+    unbond(validator_address: string, amount: Coin, memo: string | undefined, fee: Fee, sequence?: string): Promise<{
+        result: any;
+        status: number;
+    }>;
+    /**
+     * Build and broadcast MsgBeginRedelegate
+     * @param {String} validator_src_address
+     * @param {String} validator_dst_address
+     * @param {Coin} amount
+     * @param {String} memo
+     * @param {Fee} fee
+     * @param {String} sequence
+     * @return {Promise}
+     */
+    redelegate(validator_src_address: string, validator_dst_address: string, amount: Coin, memo: string | undefined, fee: Fee, sequence?: string): Promise<{
+        result: any;
+        status: number;
+    }>;
+    /**
+     * Build and broadcast MsgWithdrawDelegationReward
+     * @param {String} validator_address
+     * @param {Bool} commission
+     * @return {Promise}
+     */
+    withdrawDelegationReward(validator_address: string, commission: boolean | undefined, memo: string | undefined, fee: Fee, sequence?: string): Promise<{
         result: any;
         status: number;
     }>;

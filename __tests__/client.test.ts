@@ -134,3 +134,67 @@ it("should delegate coins", async () => {
   const response = await client.delegate(validator_address, coin, memo, fee)
   expect(response.result.logs.length).toBe(1)
 })
+
+it("should unbond coins", async () => {
+  jest.setTimeout(50000)
+
+  const validator_address =
+    "bitsongvaloper1uzqvelx3xjhn2f2pqu3mk30f82lmpmpzrzvhjg"
+
+  const coin = Coin.parse("100000ubtsg")
+  const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
+  const memo = "test"
+
+  const client = await getClient()
+  client.setMode("block")
+
+  const response = await client.unbond(validator_address, coin, memo, fee)
+  expect(response.result.logs.length).toBe(1)
+})
+
+it("should withdraw delegator rewards", async () => {
+  jest.setTimeout(50000)
+
+  const validator_address =
+    "bitsongvaloper18k859vhrtchwjznrrhdv3dhexr9va2ls8xjvz7"
+
+  const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
+  const memo = "test"
+
+  const client = await getClient()
+  client.setMode("block")
+
+  const response = await client.withdrawDelegationReward(
+    validator_address,
+    false,
+    memo,
+    fee
+  )
+  expect(response.result.logs.length).toBe(1)
+})
+
+it("should redelegate coins", async () => {
+  jest.setTimeout(50000)
+
+  const validator_src_address =
+    "bitsongvaloper1uzqvelx3xjhn2f2pqu3mk30f82lmpmpzrzvhjg"
+
+  const validator_dst_address =
+    "bitsongvaloper1ttsse04t2n9z4llnmrdjh9lrq45tp829evxmy4"
+
+  const coin = Coin.parse("100000ubtsg")
+  const fee = new Fee([Coin.parse("70000ubtsg")], "280000")
+  const memo = "test"
+
+  const client = await getClient()
+  client.setMode("block")
+
+  const response = await client.redelegate(
+    validator_src_address,
+    validator_dst_address,
+    coin,
+    memo,
+    fee
+  )
+  expect(response.result.logs.length).toBe(1)
+})

@@ -358,6 +358,9 @@ export class BitSongClient {
    * Build and broadcast MsgSend
    * @param {String} to_address
    * @param {Coin} amount
+   * @param {String} memo
+   * @param {Fee} fee
+   * @param {String} sequence
    * @return {Promise}
    */
   async send(to_address: string, amount: Coin[], memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
@@ -381,8 +384,11 @@ export class BitSongClient {
 
   /**
    * Build and broadcast MsgDelegate
-   * @param {String} to_address
+   * @param {String} validator_address
    * @param {Coin} amount
+   * @param {String} memo
+   * @param {Fee} fee
+   * @param {String} sequence
    * @return {Promise}
    */
   async delegate(validator_address: string, amount: Coin, memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
@@ -401,6 +407,101 @@ export class BitSongClient {
     }
 
     const signedTx = await this.buildTransaction([msg], memo, fee)
+    return this.broadcast(signedTx)
+  }
+
+  /**
+   * Build and broadcast MsgUndelegate
+   * @param {String} validator_address
+   * @param {Coin} amount
+   * @param {String} memo
+   * @param {Fee} fee
+   * @param {String} sequence
+   * @return {Promise}
+   */
+  async unbond(validator_address: string, amount: Coin, memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
+    const msg: Msg = {
+      type: "cosmos-sdk/MsgUndelegate",
+      value: {
+        delegator_address: this.address,
+        validator_address: validator_address,
+        amount: amount,
+      },
+    }
+
+    if (sequence === "") {
+      const account = await this.getAccount(this.address)
+      sequence = this.getSequenceNumberFromAccountInfo(account)
+    }
+
+    const signedTx = await this.buildTransaction([msg], memo, fee)
+    return this.broadcast(signedTx)
+  }
+
+  /**
+   * Build and broadcast MsgBeginRedelegate
+   * @param {String} validator_src_address
+   * @param {String} validator_dst_address
+   * @param {Coin} amount
+   * @param {String} memo
+   * @param {Fee} fee
+   * @param {String} sequence
+   * @return {Promise}
+   */
+  async redelegate(validator_src_address: string, validator_dst_address:string, amount: Coin, memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
+    const msg: Msg = {
+      type: "cosmos-sdk/MsgBeginRedelegate",
+      value: {
+        delegator_address: this.address,
+        validator_src_address: validator_src_address,
+        validator_dst_address: validator_dst_address,
+        amount: amount,
+      },
+    }
+
+    if (sequence === "") {
+      const account = await this.getAccount(this.address)
+      sequence = this.getSequenceNumberFromAccountInfo(account)
+    }
+
+    const signedTx = await this.buildTransaction([msg], memo, fee)
+    return this.broadcast(signedTx)
+  }
+
+  /**
+   * Build and broadcast MsgWithdrawDelegationReward
+   * @param {String} validator_address
+   * @param {Bool} commission
+   * @return {Promise}
+   */
+  async withdrawDelegationReward(validator_address: string, commission: boolean = false, memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
+    let msgs = []
+
+    const msg: Msg = {
+      type: "cosmos-sdk/MsgWithdrawDelegationReward",
+      value: {
+        delegator_address: this.address,
+        validator_address: validator_address
+      },
+    }
+    msgs.push(msg)
+
+    if (commission) {
+      const msgCommission: Msg = {
+        type: "cosmos-sdk/MsgWithdrawValidatorCommission",
+        value: {
+          validator_address: validator_address
+        },
+      }
+      msgs.push(msgCommission)
+    }
+
+    if (sequence === "") {
+      const account = await this.getAccount(this.address)
+      sequence = this.getSequenceNumberFromAccountInfo(account)
+    }
+
+    const signedTx = await this.buildTransaction(msgs, memo, fee)
     return this.broadcast(signedTx)
   }
 }

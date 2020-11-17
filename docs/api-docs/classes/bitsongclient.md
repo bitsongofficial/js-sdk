@@ -31,9 +31,12 @@ The Bitsong Network client.
 * [recoverAccountFromKeystore](bitsongclient.md#recoveraccountfromkeystore)
 * [recoverAccountFromMnemonic](bitsongclient.md#recoveraccountfrommnemonic)
 * [recoverAccountFromPrivateKey](bitsongclient.md#recoveraccountfromprivatekey)
+* [redelegate](bitsongclient.md#redelegate)
 * [send](bitsongclient.md#send)
 * [setAccountInfo](bitsongclient.md#setaccountinfo)
 * [setMode](bitsongclient.md#setmode)
+* [unbond](bitsongclient.md#unbond)
+* [withdrawDelegationReward](bitsongclient.md#withdrawdelegationreward)
 
 ## Constructors
 
@@ -345,6 +348,27 @@ Name | Type | Description |
 
 ___
 
+###  redelegate
+
+▸ **redelegate**(`validator_src_address`: string, `validator_dst_address`: string, `amount`: Coin, `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
+
+Build and broadcast MsgBeginRedelegate
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`validator_src_address` | string | - |
+`validator_dst_address` | string | - |
+`amount` | Coin | - |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence` | string | "" |
+
+**Returns:** *Promise‹object›*
+
+___
+
 ###  send
 
 ▸ **send**(`to_address`: string, `amount`: Coin[], `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
@@ -394,3 +418,43 @@ Name | Type |
 `mode` | string |
 
 **Returns:** *void*
+
+___
+
+###  unbond
+
+▸ **unbond**(`validator_address`: string, `amount`: Coin, `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
+
+Build and broadcast MsgUndelegate
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`validator_address` | string | - |
+`amount` | Coin | - |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence` | string | "" |
+
+**Returns:** *Promise‹object›*
+
+___
+
+###  withdrawDelegationReward
+
+▸ **withdrawDelegationReward**(`validator_address`: string, `commission`: boolean, `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
+
+Build and broadcast MsgWithdrawDelegationReward
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`validator_address` | string | - |
+`commission` | boolean | false |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence` | string | "" |
+
+**Returns:** *Promise‹object›*
