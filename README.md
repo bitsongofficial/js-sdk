@@ -69,7 +69,20 @@ config.plugins.push(new webpack.IgnorePlugin(/^usb$/))
 More examples will be provided soon.
 
 ```js
+const BitSongClient = require("@bitsongofficial/js-sdk").BitSongClient
 
+;(async () => {
+  const bitsong = new BitSongClient("https://lcd.testnet4.bitsong.network")
+  await bitsong.initChain()
+
+  const account = await bitsong.createAccountWithMneomnic()
+  console.log(account)
+  // {
+  //     privateKey: '4a79dbaa56bae88886310bb940750d07d91e85ebd5fd5a4afb3ff44f74a3af78',
+  //     address: 'bitsong14qgmmup7nr3qj3z3lfyxyu695r3a0jx2h2u6cz',
+  //     mnemonic: 'neck open train core festival index maze motor answer secret speak gesture any layer dice guitar canyon gaze monitor frown lemon effort purse father'
+  // }
+})()
 ```
 
 # Testing
