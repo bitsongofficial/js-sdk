@@ -21,6 +21,7 @@ The Bitsong Network client.
 * [createAccount](bitsongclient.md#createaccount)
 * [createAccountWithKeystore](bitsongclient.md#createaccountwithkeystore)
 * [createAccountWithMneomnic](bitsongclient.md#createaccountwithmneomnic)
+* [delegate](bitsongclient.md#delegate)
 * [generateAndDownloadKeyStore](bitsongclient.md#generateanddownloadkeystore)
 * [getAccount](bitsongclient.md#getaccount)
 * [getAccountNumberFromAccountInfo](bitsongclient.md#getaccountnumberfromaccountinfo)
@@ -30,7 +31,9 @@ The Bitsong Network client.
 * [recoverAccountFromKeystore](bitsongclient.md#recoveraccountfromkeystore)
 * [recoverAccountFromMnemonic](bitsongclient.md#recoveraccountfrommnemonic)
 * [recoverAccountFromPrivateKey](bitsongclient.md#recoveraccountfromprivatekey)
+* [send](bitsongclient.md#send)
 * [setAccountInfo](bitsongclient.md#setaccountinfo)
+* [setMode](bitsongclient.md#setmode)
 
 ## Constructors
 
@@ -70,7 +73,7 @@ ___
 
 ###  buildTransaction
 
-▸ **buildTransaction**(`msgs`: Msg[], `memo`: string, `fee`: Fee, `sequence_number`: string): *Promise‹[Transaction](transaction.md)›*
+▸ **buildTransaction**(`msgs`: Msg[], `memo`: string, `fee`: Fee, `sequence_number`: string): *Promise‹string›*
 
 Build Transaction before broadcast.
 
@@ -83,7 +86,7 @@ Name | Type | Default |
 `fee` | Fee | - |
 `sequence_number` | string | "" |
 
-**Returns:** *Promise‹[Transaction](transaction.md)›*
+**Returns:** *Promise‹string›*
 
 Transaction object
 
@@ -167,6 +170,26 @@ Creates an account from mnemonic seed phrase.
 * **mnemonic**: *string*
 
 * **privateKey**: *string*
+
+___
+
+###  delegate
+
+▸ **delegate**(`validator_address`: string, `amount`: Coin, `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
+
+Build and broadcast MsgDelegate
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`validator_address` | string | - |
+`amount` | Coin | - |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence` | string | "" |
+
+**Returns:** *Promise‹object›*
 
 ___
 
@@ -322,6 +345,26 @@ Name | Type | Description |
 
 ___
 
+###  send
+
+▸ **send**(`to_address`: string, `amount`: Coin[], `memo`: string, `fee`: Fee, `sequence`: string): *Promise‹object›*
+
+Build and broadcast MsgSend
+
+**Parameters:**
+
+Name | Type | Default |
+------ | ------ | ------ |
+`to_address` | string | - |
+`amount` | Coin[] | - |
+`memo` | string | "" |
+`fee` | Fee | - |
+`sequence` | string | "" |
+
+**Returns:** *Promise‹object›*
+
+___
+
 ###  setAccountInfo
 
 ▸ **setAccountInfo**(`privateKey`: string): *Promise‹[BitSongClient](bitsongclient.md)›*
@@ -335,3 +378,19 @@ Name | Type |
 `privateKey` | string |
 
 **Returns:** *Promise‹[BitSongClient](bitsongclient.md)›*
+
+___
+
+###  setMode
+
+▸ **setMode**(`mode`: string): *void*
+
+Set broadcast mode
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`mode` | string |
+
+**Returns:** *void*

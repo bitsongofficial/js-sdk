@@ -1,6 +1,6 @@
 import * as crypto from "../crypto";
 import HttpRequest from "../utils/request";
-import Transaction, { Fee, Msg } from '../tx';
+import { Coin, Fee, Msg } from '../tx';
 export declare const api: {
     broadcast: string;
 };
@@ -11,10 +11,11 @@ export declare class BitSongClient {
     _httpClient: HttpRequest;
     private _hdpath;
     private _privateKey;
-    address?: string;
-    chain_id: string;
-    addressPrefix: string | string;
-    account_number: string;
+    private address?;
+    private chain_id;
+    private addressPrefix;
+    private account_number;
+    private mode;
     /**
      * @param {String} server BitSong Network public url
      * @param {String} addressPrefix BitSong Address Prefix
@@ -23,6 +24,12 @@ export declare class BitSongClient {
      * @param {Number} source where does this transaction come from (default 0)
      */
     constructor(server: string, addressPrefix?: string, hdpath?: string);
+    /**
+     * Set broadcast mode
+     * @param {string} mode
+     * @return {void}
+     */
+    setMode(mode: string): void;
     /**
      * Set client account.
      * @param {string} privateKey
@@ -38,7 +45,7 @@ export declare class BitSongClient {
      * @param {Number} sequenceNumber
      * @return {Transaction} Transaction object
      */
-    buildTransaction(msgs: Msg[], memo: string | undefined, fee: Fee, sequence_number?: string): Promise<Transaction>;
+    buildTransaction(msgs: Msg[], memo: string | undefined, fee: Fee, sequence_number?: string): Promise<string>;
     /**
      * Broadcast a raw transaction to the blockchain.
      * @param {String} signedBz signed and serialized raw transaction
@@ -174,4 +181,24 @@ export declare class BitSongClient {
      * @return {String}
      */
     getClientKeyAddress(): string;
+    /**
+     * Build and broadcast MsgSend
+     * @param {String} to_address
+     * @param {Coin} amount
+     * @return {Promise}
+     */
+    send(to_address: string, amount: Coin[], memo: string | undefined, fee: Fee, sequence?: string): Promise<{
+        result: any;
+        status: number;
+    }>;
+    /**
+     * Build and broadcast MsgDelegate
+     * @param {String} to_address
+     * @param {Coin} amount
+     * @return {Promise}
+     */
+    delegate(validator_address: string, amount: Coin, memo: string | undefined, fee: Fee, sequence?: string): Promise<{
+        result: any;
+        status: number;
+    }>;
 }

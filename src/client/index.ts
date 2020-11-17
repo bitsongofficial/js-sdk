@@ -3,7 +3,7 @@ import * as crypto from "../crypto"
 import HttpRequest from "../utils/request"
 import { v4 as uuidv4 } from 'uuid';
 import FileSaver from "file-saver"
-import Transaction, { Fee, Msg } from '../tx';
+import Transaction, { Coin, Fee, Msg } from '../tx';
 
 export const api = {
   broadcast: "/txs",
@@ -17,10 +17,11 @@ export class BitSongClient {
   public _httpClient: HttpRequest
   private _hdpath: string | string = `44'/118'/0'/0/`
   private _privateKey: string
-  public address?: string
-  public chain_id: string
-  public addressPrefix: string | string = 'bitsong'
-  public account_number: string
+  private address?: string
+  private chain_id: string
+  private addressPrefix: string | string = 'bitsong'
+  private account_number: string
+  private mode: string
 
   /**
    * @param {String} server BitSong Network public url
@@ -29,7 +30,6 @@ export class BitSongClient {
    * @param {Boolean} useAsyncBroadcast use async broadcast mode, faster but less guarantees (default off)
    * @param {Number} source where does this transaction come from (default 0)
    */
-  // constructor(server: string, useAsyncBroadcast = false, source = 0) {
   constructor(server: string, addressPrefix?: string, hdpath?: string) {
     if (!server) {
       throw new Error("BitSong chain server should not be null")
@@ -47,6 +47,16 @@ export class BitSongClient {
     this.chain_id = ""
     this._privateKey = ""
     this.account_number = ""
+    this.mode = "sync"
+  }
+
+  /**
+   * Set broadcast mode
+   * @param {string} mode
+   * @return {void}
+   */
+  setMode(mode: string):void {
+    this.mode = mode
   }
 
   /**
@@ -76,7 +86,7 @@ export class BitSongClient {
    * @param {Number} sequenceNumber
    * @return {Transaction} Transaction object
    */
-  async buildTransaction(msgs: Msg[], memo = "", fee: Fee, sequence_number = ""): Promise<Transaction> {
+  async buildTransaction(msgs: Msg[], memo = "", fee: Fee, sequence_number = ""): Promise<string> {
     if ((!this.account_number || !sequence_number)) {
         const account_info = await this.getAccount()
         sequence_number = this.getSequenceNumberFromAccountInfo(account_info)
@@ -84,7 +94,8 @@ export class BitSongClient {
     }
 
     const tx = new Transaction(this.chain_id, this.account_number, sequence_number, fee, memo, msgs)
-    return tx.sign(this._privateKey)
+    tx.setMode(this.mode)
+    return tx.sign(this._privateKey).serialize()
 }
 
   /**
@@ -93,7 +104,7 @@ export class BitSongClient {
    * @param {Boolean} sync use synchronous mode, optional
    * @return {Promise} resolves with response (success or fail)
    */
-  async broadcast(signedBz: string) {
+  async broadcast(signedBz: string): Promise<{result: any, status: number}> {
     const opts = {
       data: signedBz,
       headers: {
@@ -341,5 +352,55 @@ export class BitSongClient {
     )
     this.address = address
     return address
+  }
+
+  /**
+   * Build and broadcast MsgSend
+   * @param {String} to_address
+   * @param {Coin} amount
+   * @return {Promise}
+   */
+  async send(to_address: string, amount: Coin[], memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
+    const msg: Msg = {
+      type: "cosmos-sdk/MsgSend",
+      value: {
+        amount: amount,
+        from_address: this.address,
+        to_address: to_address,
+      },
+    }
+
+    if (sequence === "") {
+      const account = await this.getAccount(this.address)
+      sequence = this.getSequenceNumberFromAccountInfo(account)
+    }
+
+    const signedTx = await this.buildTransaction([msg], memo, fee)
+    return this.broadcast(signedTx)
+  }
+
+  /**
+   * Build and broadcast MsgDelegate
+   * @param {String} to_address
+   * @param {Coin} amount
+   * @return {Promise}
+   */
+  async delegate(validator_address: string, amount: Coin, memo: string = "", fee: Fee, sequence: string = ""): Promise<{result: any, status: number}> {
+    const msg: Msg = {
+      type: "cosmos-sdk/MsgDelegate",
+      value: {
+        delegator_address: this.address,
+        validator_address: validator_address,
+        amount: amount,
+      },
+    }
+
+    if (sequence === "") {
+      const account = await this.getAccount(this.address)
+      sequence = this.getSequenceNumberFromAccountInfo(account)
+    }
+
+    const signedTx = await this.buildTransaction([msg], memo, fee)
+    return this.broadcast(signedTx)
   }
 }

@@ -1,7 +1,7 @@
 import Big, { BigSource } from "big.js"
 
 import * as crypto from "../src/crypto"
-import Transaction, { Msg } from "../src/tx"
+import Transaction, { Msg, Coin } from "../src/tx"
 
 import {
   getClient,
@@ -114,35 +114,41 @@ it("get account", async () => {
 it("should transfer coins", async () => {
   jest.setTimeout(50000)
 
-  const client = await getClient()
-  const account = await client.getAccount(targetAddress)
-  const sequence = client.getSequenceNumberFromAccountInfo(account)
-
-  const msg: Msg = {
-    type: "cosmos-sdk/MsgSend",
-    value: {
-      amount: [
-        {
-          amount: "1000000",
-          denom: "ubtsg",
-        },
-      ],
-      from_address: targetAddress,
-      to_address: targetAddress,
-    },
+  const coin: Coin = {
+    amount: "1000000",
+    denom: "ubtsg",
   }
 
-  const tx: Transaction = new Transaction(
-    client.chain_id,
-    client.account_number,
-    sequence,
-    defaultFee,
-    "",
-    [msg]
-  )
-  tx.setMode("block")
+  const memo = "test"
 
-  const txBz = tx.sign(privateKey).serialize()
-  const response = await client.broadcast(txBz)
+  const client = await getClient()
+  client.setMode("block")
+
+  const response = await client.send(targetAddress, [coin], memo, defaultFee)
+  expect(response.result.logs.length).toBe(1)
+})
+
+it("should delegate coins", async () => {
+  jest.setTimeout(50000)
+
+  const validator_address =
+    "bitsongvaloper1uzqvelx3xjhn2f2pqu3mk30f82lmpmpzrzvhjg"
+
+  const coin: Coin = {
+    amount: "1000000",
+    denom: "ubtsg",
+  }
+
+  const memo = "test"
+
+  const client = await getClient()
+  client.setMode("block")
+
+  const response = await client.delegate(
+    validator_address,
+    coin,
+    memo,
+    defaultFee
+  )
   expect(response.result.logs.length).toBe(1)
 })

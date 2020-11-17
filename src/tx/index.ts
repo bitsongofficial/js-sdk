@@ -86,7 +86,7 @@ class Transaction {
     this.mode = "sync"
   }
 
-  setMode(mode: string) {
+  setMode(mode: string): void {
     this.mode = mode
   }
 
