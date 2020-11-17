@@ -1,4 +1,0 @@
-
-# Module: "protocol-buffers-encodings"
-
-

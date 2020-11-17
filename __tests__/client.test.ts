@@ -1,7 +1,7 @@
 import Big, { BigSource } from "big.js"
 
 import * as crypto from "../src/crypto"
-import Transaction, { Msg, Coin } from "../src/tx"
+import { Coin } from "../src/tx"
 
 import {
   getClient,
