@@ -16,32 +16,3 @@ declare module "crypto-browserify" {
     const crypto: Pick<typeof _crypto, "createHash" | "createHmac" | "pbkdf2" | "pbkdf2Sync" | "randomBytes" | "pseudoRandomBytes" | "createCipher" | "createDecipher" | "createDiffieHellman" | "createSign" | "createVerify" | "createECDH" | "publicEncrypt" | "privateDecrypt" | "privateEncrypt" | "publicDecrypt" | "createCipheriv" | "createDecipheriv">;
     export default crypto;
 }
-declare module "protocol-buffers-encodings" {
-    namespace string {
-        const encode: (val: any, buffer: Buffer, offset?: number) => Buffer;
-        const decode: (buf: Buffer | number[], offset?: number) => any;
-        const encodingLength: (val: any) => number;
-    }
-    namespace bytes {
-        const encode: (val: any, buffer: Buffer, offset?: number) => Buffer;
-        const decode: (buf: Buffer | number[], offset?: number) => any;
-        const encodingLength: (val: any) => number;
-    }
-    namespace bool {
-        const encode: (val: any, buffer: Buffer, offset?: number) => Buffer;
-        const decode: (buf: Buffer | number[], offset?: number) => any;
-        const encodingLength: (val: any) => number;
-    }
-    namespace varint {
-        const encode: (val: any, buffer: Buffer, offset?: number) => Buffer;
-        const decode: (buf: Buffer | number[], offset?: number) => any;
-        const encodingLength: (val: any) => number;
-    }
-}
-declare module "ndjson" {
-    import { Stream } from "stream";
-    const wat: {
-        stringify: () => Stream;
-    };
-    export default wat;
-}
