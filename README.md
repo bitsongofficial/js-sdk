@@ -45,13 +45,13 @@ $ sudo apt-get install libudev-dev libusb-dev usbutils
 If you **do not** need Ledger support with node.js:
 
 ```bash
-$ npm i -s https://github.com/bitsongofficial/js-sdk.git#master --no-optional
+$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.5.0-dev --no-optional
 ```
 
 If you **need** Ledger support with node.js:
 
 ```bash
-$ npm i -s https://github.com/bitsongofficial/js-sdk.git#master
+$ npm i -s https://github.com/bitsongofficial/js-sdk.git#v0.5.0-dev
 ```
 
 ### Use with Webpack
@@ -77,18 +77,53 @@ More examples will be provided soon.
 
 ```js
 const BitSongClient = require("@bitsongofficial/js-sdk").BitSongClient
+const Coin = require("@bitsongofficial/js-sdk").Coin
+const Fee = require("@bitsongofficial/js-sdk").Fee
 
 ;(async () => {
   const bitsong = new BitSongClient("https://lcd.testnet4.bitsong.network")
   await bitsong.initChain()
+  bitsong.setMode("block") // optional: set broadcast mode to block instead of sync
 
-  const account = await bitsong.createAccountWithMneomnic()
-  console.log(account)
-  // {
-  //     privateKey: '4a79dbaa56bae88886310bb940750d07d91e85ebd5fd5a4afb3ff44f74a3af78',
-  //     address: 'bitsong14qgmmup7nr3qj3z3lfyxyu695r3a0jx2h2u6cz',
-  //     mnemonic: 'neck open train core festival index maze motor answer secret speak gesture any layer dice guitar canyon gaze monitor frown lemon effort purse father'
-  // }
+  // const alice = await bitsong.recoverAccountFromMnemonic("alice----mnemonic")
+  const alice = await bitsong.createAccountWithMneomnic()
+  console.log(alice)
+
+  // const jack = await bitsong.recoverAccountFromMnemonic("jack----mnemonic")
+  const jack = await bitsong.createAccountWithMneomnic()
+  console.log(jack)
+
+  // Set your private key and retrieve your account info
+  try {
+    await bitsong.setAccountInfo(alice.privateKey)
+  } catch (e) {
+    console.error(e)
+  }
+
+  // Transfer 1000000ubtsg from alice to jack
+  try {
+    const amount = [Coin.parse("1000000ubtsg")]
+    const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
+    const memo = "Sent from bitsong js-sdk ;)"
+
+    const response = await bitsong.send(jack.address, amount, memo, fee)
+    console.log(response)
+  } catch (e) {
+    console.error(e)
+  }
+
+  // Delegate 1000000ubtsg from alice to bitsongvaloper1ttsse04t2n9z4llnmrdjh9lrq45tp829evxmy4
+  try {
+    const validator = "bitsongvaloper1ttsse04t2n9z4llnmrdjh9lrq45tp829evxmy4"
+    const amount = Coin.parse("1000000ubtsg")
+    const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
+    const memo = "Delegated from bitsong js-sdk ;)"
+
+    const response = await bitsong.delegate(validator, amount, memo, fee)
+    console.log(response)
+  } catch (e) {
+    console.error(e)
+  }
 })()
 ```
 
