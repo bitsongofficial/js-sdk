@@ -3,7 +3,7 @@ import * as crypto from "../crypto"
 import HttpRequest from "../utils/request"
 import { v4 as uuidv4 } from 'uuid';
 import FileSaver from "file-saver"
-import Transaction, { Coin, Fee, Msg } from '../tx';
+import { Transaction, Coin, Fee, Msg } from '../tx';
 
 export const api = {
   broadcast: "/txs",

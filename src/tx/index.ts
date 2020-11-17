@@ -58,7 +58,7 @@ export interface StdSignMsg {
  * @param {Object} param.msg
  * @param {String} param.sequence
  */
-class Transaction {
+export class Transaction {
   public chain_id: string
   public account_number: string
   public sequence: string
@@ -151,5 +151,3 @@ class Transaction {
     return JSON.stringify(sortObject(serializedTx))
   }
 }
-
-export default Transaction

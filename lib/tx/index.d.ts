@@ -47,7 +47,7 @@ export interface StdSignMsg {
  * @param {Object} param.msg
  * @param {String} param.sequence
  */
-declare class Transaction {
+export declare class Transaction {
     chain_id: string;
     account_number: string;
     sequence: string;
@@ -62,4 +62,3 @@ declare class Transaction {
     sign(privateKey: string): Transaction;
     serialize(): string;
 }
-export default Transaction;

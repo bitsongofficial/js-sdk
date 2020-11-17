@@ -1,4 +1,4 @@
-import Transaction, { Msg } from "../src/tx"
+import { Transaction, Msg } from "../src/tx"
 
 import { privateKey, targetAddress, defaultFee } from "./utils"
 
