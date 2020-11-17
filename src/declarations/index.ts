@@ -39,35 +39,3 @@ declare module "crypto-browserify" {
   >
   export default crypto
 }
-
-declare module "protocol-buffers-encodings" {
-  export namespace string {
-    export const encode: (val: any, buffer: Buffer, offset?: number) => Buffer
-    export const decode: (buf: Buffer | number[], offset?: number) => any
-    export const encodingLength: (val: any) => number
-  }
-
-  export namespace bytes {
-    export const encode: (val: any, buffer: Buffer, offset?: number) => Buffer
-    export const decode: (buf: Buffer | number[], offset?: number) => any
-    export const encodingLength: (val: any) => number
-  }
-
-  export namespace bool {
-    export const encode: (val: any, buffer: Buffer, offset?: number) => Buffer
-    export const decode: (buf: Buffer | number[], offset?: number) => any
-    export const encodingLength: (val: any) => number
-  }
-
-  export namespace varint {
-    export const encode: (val: any, buffer: Buffer, offset?: number) => Buffer
-    export const decode: (buf: Buffer | number[], offset?: number) => any
-    export const encodingLength: (val: any) => number
-  }
-}
-
-declare module "ndjson" {
-  import { Stream } from "stream"
-  const wat: { stringify: () => Stream }
-  export default wat
-}
