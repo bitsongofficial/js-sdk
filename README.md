@@ -21,6 +21,10 @@ interact with BitSong Network. It includes the following core components:
 > Most concepts are based from binance-javascript-sdk
 > https://github.com/binance-chain/javascript-sdk
 
+## Projects Availables
+
+- [BitSong Console](https://console.bitsong.network)
+
 # Installation
 
 Important, please follow the instructions for your OS below:
