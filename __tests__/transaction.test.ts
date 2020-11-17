@@ -1,6 +1,7 @@
+import { Coin, Fee } from "../src/common"
 import { Transaction, Msg } from "../src/tx"
 
-import { privateKey, targetAddress, defaultFee } from "./utils"
+import { privateKey, targetAddress } from "./utils"
 
 describe("Transaction", () => {
   beforeEach(() => {
@@ -15,12 +16,7 @@ describe("Transaction", () => {
     const msg: Msg = {
       type: "cosmos-sdk/MsgSend",
       value: {
-        amount: [
-          {
-            amount: "1000000",
-            denom: "ubtsg",
-          },
-        ],
+        amount: [Coin.parse("1000000ubtsg")],
         from_address: targetAddress,
         to_address: targetAddress,
       },
@@ -30,7 +26,7 @@ describe("Transaction", () => {
       chain_id,
       account_number,
       sequence,
-      defaultFee,
+      new Fee([Coin.parse("50000ubtsg")], "200000"),
       "",
       [msg]
     )
@@ -53,10 +49,7 @@ describe("Transaction", () => {
         delegator_address: targetAddress,
         validator_address:
           "bitsongvaloper1pdfr7xuckj6lhdphdde6peres9ufwgps8v9w59",
-        amount: {
-          denom: "ubtsg",
-          amount: "1000000",
-        },
+        amount: Coin.parse("1000000ubtsg"),
       },
     }
 
@@ -64,7 +57,7 @@ describe("Transaction", () => {
       chain_id,
       account_number,
       sequence,
-      defaultFee,
+      new Fee([Coin.parse("50000ubtsg")], "200000"),
       "",
       [msg]
     )

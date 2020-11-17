@@ -36,16 +36,6 @@ export const keystore = {
   },
 }
 
-export const defaultFee: Fee = {
-  amount: [
-    {
-      amount: "50000",
-      denom: "ubtsg",
-    },
-  ],
-  gas: "200000",
-}
-
 let client: BitSongClient
 
 export const getClient = async (

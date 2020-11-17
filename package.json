@@ -97,7 +97,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint --quiet && yarn build:docs"
+      "pre-commit": "yarn lint --quiet"
     }
   }
 }

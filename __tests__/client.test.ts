@@ -1,16 +1,9 @@
 import Big, { BigSource } from "big.js"
 
+import { Coin, Fee } from "../src/common"
 import * as crypto from "../src/crypto"
-import { Coin } from "../src/tx"
 
-import {
-  getClient,
-  mnemonic,
-  keystore,
-  targetAddress,
-  wait,
-  defaultFee,
-} from "./utils"
+import { getClient, mnemonic, keystore, targetAddress, wait } from "./utils"
 
 const waitSeconds = 0
 
@@ -114,17 +107,14 @@ it("get account", async () => {
 it("should transfer coins", async () => {
   jest.setTimeout(50000)
 
-  const coin: Coin = {
-    amount: "1000000",
-    denom: "ubtsg",
-  }
-
-  const memo = "test"
-
   const client = await getClient()
   client.setMode("block")
 
-  const response = await client.send(targetAddress, [coin], memo, defaultFee)
+  const coin = Coin.parse("1000000ubtsg")
+  const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
+  const memo = "test"
+
+  const response = await client.send(targetAddress, [coin], memo, fee)
   expect(response.result.logs.length).toBe(1)
 })
 
@@ -134,21 +124,13 @@ it("should delegate coins", async () => {
   const validator_address =
     "bitsongvaloper1uzqvelx3xjhn2f2pqu3mk30f82lmpmpzrzvhjg"
 
-  const coin: Coin = {
-    amount: "1000000",
-    denom: "ubtsg",
-  }
-
+  const coin = Coin.parse("1000000ubtsg")
+  const fee = new Fee([Coin.parse("50000ubtsg")], "200000")
   const memo = "test"
 
   const client = await getClient()
   client.setMode("block")
 
-  const response = await client.delegate(
-    validator_address,
-    coin,
-    memo,
-    defaultFee
-  )
+  const response = await client.delegate(validator_address, coin, memo, fee)
   expect(response.result.logs.length).toBe(1)
 })

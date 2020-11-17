@@ -1,18 +1,25 @@
 # BitSong Network JavaScript SDK
 
+<p>
+<img src="https://img.shields.io/badge/version-0.4.0--dev-yellow.svg" />
+<a href="https://twitter.com/bitsongofficial">
+<img alt="Twitter: BitSong" src="https://img.shields.io/twitter/follow/bitsongofficial.svg?style=social"  target="_blank" />
+</a>
+</p>
+
 The BitSong Network JavaScript SDK allows browsers and node.js clients to
 interact with BitSong Network. It includes the following core components:
-
-## THIS PROJECT IS UNDER ACTIVE DEVELOPMENT
-
-> Most concepts are based from binance-javascript-sdk
-> https://github.com/binance-chain/javascript-sdk
 
 - **crypto** - core cryptographic functions.
 - **client** - implementations of BitSong Network transaction types, such as for
   transfer and staking.
 - **accounts** - management of "accounts" and wallets, including seed and
   encrypted mnemonic generation.
+
+## THIS PROJECT IS UNDER ACTIVE DEVELOPMENT
+
+> Most concepts are based from binance-javascript-sdk
+> https://github.com/binance-chain/javascript-sdk
 
 # Installation
 
